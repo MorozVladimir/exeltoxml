@@ -16,10 +16,6 @@ namespace exeltoxml
         public Company company { get; set; }
         public List<Category> categories { get; set; }
         public List<good> goods { get; set; }
-        //  public List<UserForMailing> users { get; set; }
-        //    public List<Colums12> datas { get; set; }
-        //    List<ForWeight> forWeights = new List<ForWeight>();
-
 
         public ExelData(string fName)
         {
