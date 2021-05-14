@@ -11,26 +11,33 @@ namespace exeltoxml
             string importFilePath = @"C:\Users\iterator_pro\Desktop\allo_price.xlsx";
 
             ExelData exelData = new ExelData(importFilePath);
+            string time = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
             string exportFilePath = @"C:\Users\iterator_pro\Desktop\allo_price.xml";
-            string time = "2021-05-12 17:05";
+      //      string time = "2021-05-12 17:05";
             //string head = "This XML file does not appear to have any style information associated with it. The document tree is shown below.\n" +
             string head = "<?xml version = \"1.0\" encoding = \"UTF-8\" ?>\n" +
                       //    "<!DOCTYPE yml_catalog SYSTEM \"shops.dtd\" >\n" +
                           "<yml_catalog date = \"" + time + "\" >\n" +
                           "<shop>\n" +
-                          "<name>ЕСТ</name>\n" +
-                          "<company>ЕСТ</company>\n" +
+                          "<name>" + exelData.company.name + "</name>\n" +
+                          "<company>" + exelData.company.url + "</company>\n" +
                           "<currencies>\n" +
-                          "<currency id = \"UAH\" rate = \"1\"/>\n" +
+                          "<currency id = \"" + exelData.company.currenciesId +
+                          "\" rate = \"" + exelData.company.currenciesRate + "\"/>\n" +
                           "</currencies>\n";
 
-            string category = "";
+            string categoryTegs = "";
 
             //create categories from exel file
 
-            string categoryHead = "<categories>\n";
-            string categoryFooter = "\n</categories>\n";
-            string categories = categoryHead + category + categoryFooter;
+            string categoriesHead = "<categories>\n";
+            string categoriesFooter = "\n</categories>\n";
+
+            foreach(var ct in exelData.categories)
+            {
+                categoryTegs = "<category id=\"" + ct.id + "\" parentId =\"" + ct.parentId + "\">" + ct.value + "</categotry>\n";
+            }
+            string categories = categoriesHead + categoryTegs + categoriesFooter;
 
             string offer = "";
 
