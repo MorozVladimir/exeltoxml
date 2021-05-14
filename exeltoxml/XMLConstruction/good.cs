@@ -11,7 +11,7 @@ namespace exeltoxml.XMLConstruction
         public decimal price { get; set; }
         public decimal priceOld { get; set; }
         public decimal pricePromo { get; set; }
-        public decimal stockQuamtity { get; set; }
+        public decimal stockQuantity { get; set; }
         public string CurrencyId { get; set; }
         public int categoryId { get; set; }
         public List<string> pictures { get; set; }
@@ -20,6 +20,12 @@ namespace exeltoxml.XMLConstruction
         public string vendor { get; set; }
         public string description { get; set; }
         public List<goodParam> parametrs { get; set; }
+
+        public good()
+        {
+            pictures = new List<string>();
+            parametrs = new List<goodParam>();
+        }
 
     }
 }

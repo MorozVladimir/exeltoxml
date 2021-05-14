@@ -70,204 +70,113 @@ namespace exeltoxml
                     Console.WriteLine(cat.id + " " + cat.parentId + " " + cat.value);
                 }
 
+
+                goods = new List<good>();
+                int goodRowCount = goodsheet.Dimension.Rows;
+                int goodColumnCount = goodsheet.Dimension.Columns;
+                Console.WriteLine("grow -" + goodRowCount + "  gcol -" + goodColumnCount);
+                bool nextId = false;
+                good good = new good();
+                for (int i = 2; i <= goodRowCount; i++)
+                {
+                    //       good = new good();
+                    int gidtemp; 
+                    try { gidtemp = Int32.Parse(goodsheet.Cells[i, 1].Value.ToString()); }
+                    catch { gidtemp = 0; }
+                    Console.Write("gid-" + gidtemp);
+                    if (gidtemp != 0)
+                    {
+                        if (nextId == true)
+                        {
+                            goods.Add(good);
+                            good = new good();
+                            //                         nextId = true;
+                        }
+                        else
+                        {
+                            nextId = true;
+                        }
+                        good.id = gidtemp;
+                        good.available = (goodsheet.Cells[i, 2].Value.ToString().Equals("true")) ? true : false;
+                 //       Console.Write("  gava-" + good.available);
+                        good.price = decimal.Parse(goodsheet.Cells[i, 3].Value.ToString());
+                 //       Console.Write("  price-" + good.price);
+                        good.priceOld = decimal.Parse(goodsheet.Cells[i, 4].Value.ToString());
+                 //       Console.Write("  priceOld-" + good.priceOld);
+                        good.pricePromo = decimal.Parse(goodsheet.Cells[i, 5].Value.ToString());
+                 //       Console.Write("  pricePromo-" + good.pricePromo);
+                        good.stockQuantity = decimal.Parse(goodsheet.Cells[i, 6].Value.ToString()); 
+                //        Console.Write("  stockQuantity-" + good.stockQuantity);
+                        good.CurrencyId = goodsheet.Cells[i, 7].Value.ToString();
+               //         Console.Write("  currenciId-" + good.CurrencyId);
+                        good.categoryId = Int32.Parse(goodsheet.Cells[i, 8].Value.ToString());
+                //        Console.Write("  categoryId-" + good.categoryId);
+                      //   good.pictures = new List<string>();
+                      //  Console.Write("  picture-" + goodsheet.Cells[i, 9].Value.ToString());
+                        good.pictures.Add(goodsheet.Cells[i, 9].Value.ToString());
+                //        Console.Write("  picture-" + good.pictures.ToArray()[0]);
+                        good.name = goodsheet.Cells[i, 10].Value.ToString();
+                        good.article = goodsheet.Cells[i, 11].Value.ToString();
+                        good.vendor = goodsheet.Cells[i, 12].Value.ToString();
+                        good.description = goodsheet.Cells[i, 13].Value.ToString();
+                        goodParam goodParam = new goodParam();
+                        goodParam.name = goodsheet.Cells[i, 14].Value.ToString();
+                        goodParam.value = goodsheet.Cells[i, 15].Value.ToString();
+                        ///  good.pictures
+                        Console.WriteLine(goodParam.name + " " + goodParam.value + " " + good.id);
+                        good.parametrs.Add(goodParam);
+
+                    }
+                    else
+                    {
+                        try
+                        {
+                            var pic = goodsheet.Cells[i, 9].Value.ToString();
+                            good.pictures.Add(pic);
+                        }
+                        catch
+                        {
+
+                        }
+
+                        try
+                        {
+                            var parname = goodsheet.Cells[i, 14].Value.ToString();
+                            var parval = goodsheet.Cells[i, 15].Value.ToString();
+                        //    Console.WriteLine(parname + " " + parval);
+                            goodParam goodParam = new goodParam();
+                            goodParam.name = parname;
+                            goodParam.value = parval;
+                            Console.WriteLine(goodParam.name + " " + goodParam.value + " " + good.id);
+                            good.parametrs.Add(goodParam);
+                        }
+                        catch
+                        {
+
+                        }
+                        Console.WriteLine(i + " из " + goodRowCount);
+                        if (i == goodRowCount)
+                        {
+                            goods.Add(good);
+                        }
+                    }
+                }
+                foreach(var g in goods)
+                {
+                    Console.WriteLine("gid-" + g.id + "  gname-" + g.name ); 
+                    foreach(var pi in g.pictures)
+                    {
+                        Console.WriteLine("   ->" + pi);
+                    }
+                    foreach (var pa in g.parametrs)
+                    {
+                        Console.WriteLine("              paname>>" + pa.name + "   paval>>" + pa.value + " " + g.id);
+                    }
+                }
+
+                Console.WriteLine("+++++++++++++++++++++");
+                Console.WriteLine(goods.ToArray()[0].parametrs.ToArray()[0].value);
             }
-
-
-
-
-
-
-
-
-
-
-
-            //  ProgressBar button = (ProgressBar)d;
-            //  button.Value = 30.0;
-            //users = new List<UserForMailing>();
-            //  datas = new List<Colums12>();
-            //System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
-            //// System.Text.Encoding.Convert.;
-            //using (var stream = File.Open(fName, FileMode.Open, FileAccess.Read))
-            //{
-            //    using (var reader = ExcelReaderFactory.CreateReader(stream))
-            //    {
-            //        int count = 0;
-            //        do
-            //        {
-            //            //   var ufm = new UserForMailing();
-            //            //  var data = new Colums12();
-            //            while (reader.Read()) //Each ROW
-            //            {
-            //                count++;
-            //                string firstname = "";
-            //                for (int column = 0; column < reader.FieldCount; column++)
-            //                {
-            //                    //Console.WriteLine(reader.GetString(column));//Will blow up if the value is decimal etc. 
-            //                    //    Console.WriteLine(reader.GetValue(column));//Get Value returns object
-            //                    // string rowIs;
-            //                    switch (column)
-            //                    {
-            //                        case 0:
-            //                            var di = reader.GetValue(column).ToString();
-            //                            //    data.Column0 = di;
-            //                            //switch (d)
-            //                            //{
-            //                            //    case "0":
-            //                            //        rowIs = "category";
-            //                            //        break;
-            //                            //    case "1":
-            //                            //        rowIs = "good";
-            //                            //        break;
-            //                            //    case "2":
-
-            //                            //        break;
-            //                            //    case "3":
-            //                            //        rowIs = "groupCategory";
-            //                            //        break;
-            //                            //    default:
-
-            //                            //        break;
-            //                            //}
-            //                            //  ufm.Barcode = reader.GetValue(column).ToString();
-            //                            break;
-            //                        case 1:
-            //                            try
-            //                            {
-            //                                //       data.Column1 = reader.GetValue(column).ToString();
-            //                            }
-            //                            catch
-            //                            {
-
-            //                            }
-            //                            break;
-            //                        case 2:
-            //                            try
-            //                            {
-            //                                //       data.Column2 = reader.GetValue(column).ToString();
-            //                            }
-            //                            catch
-            //                            {
-
-            //                            }
-            //                            break;
-            //                        case 3:
-            //                            try
-            //                            {
-            //                                //       data.Column3 = reader.GetValue(column).ToString();
-            //                            }
-            //                            catch
-            //                            {
-
-            //                            }
-            //                            break;
-            //                        case 4:
-            //                            try
-            //                            {
-            //                                //        data.Column4 = reader.GetValue(column).ToString();
-            //                            }
-            //                            catch
-            //                            {
-
-            //                            }
-            //                            break;
-            //                        case 5:
-            //                            try
-            //                            {
-            //                                //        data.Column5 = reader.GetValue(column).ToString();
-            //                            }
-            //                            catch
-            //                            {
-
-            //                            }
-            //                            break;
-            //                        case 6:
-            //                            try
-            //                            {
-            //                                var dgh = reader.GetValue(column).ToString();
-            //                                var hh = dgh.Split(",");
-            //                                //       data.Column6 = hh[0] + "." + hh[1];
-            //                                // data.Column6 = reader.GetValue(column).ToString();
-            //                            }
-            //                            catch
-            //                            {
-
-            //                            }
-            //                            break;
-            //                        case 7:
-            //                            try
-            //                            {
-            //                                //       data.Column7 = reader.GetValue(column).ToString();
-            //                            }
-            //                            catch
-            //                            {
-
-            //                            }
-            //                            //  firstname = reader.GetValue(column).ToString();
-            //                            break;
-            //                        case 8:
-            //                            try
-            //                            {
-            //                                //       data.Column8 = reader.GetValue(column).ToString();
-            //                            }
-            //                            catch
-            //                            {
-
-            //                            }
-            //                            //  ufm.Name = firstname + " " + reader.GetValue(column).ToString();
-            //                            break;
-            //                        case 9:
-            //                            try
-            //                            {
-            //                                //         data.Column9 = reader.GetValue(column).ToString();
-            //                            }
-            //                            catch
-            //                            {
-
-            //                            }
-            //                            break;
-            //                        case 10:
-            //                            try
-            //                            {
-            //                                //        data.Column10 = reader.GetValue(column).ToString();
-            //                            }
-            //                            catch
-            //                            {
-
-            //                            }
-            //                            break;
-            //                        case 11:
-            //                            try
-            //                            {
-            //                                //        data.Column11 = reader.GetValue(column).ToString();
-            //                            }
-            //                            catch
-            //                            {
-
-            //                            }
-            //                            break;
-            //                            //    case 13:
-            //                            //  ufm.Email = reader.GetValue(column).ToString();
-            //                            //       break;
-            //                            //   case 14:
-            //                            // ufm.ExhibitionName = reader.GetValue(column).ToString();
-            //                            //      break;
-            //                    }
-            //                    //           button.Value = button.Value + 1;
-            //                }
-            //                var persentage = (count * 100) / reader.RowCount;
-            //                //   progress.Report(persentage);
-            //                // d.Value = count;
-            //                //  datas.Add(data);
-            //                //   data = new Colums12();
-            //                // users.Add(ufm);
-            //                // ufm = new UserForMailing();
-            //            }
-            //        }
-            //        while (false); //Move to NEXT SHEET
-
-            //    }
-            //}
         }
 
         private string validate1(string text)
